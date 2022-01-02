@@ -3,9 +3,12 @@ package sample;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
+
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.text.Text;
 
@@ -48,6 +51,8 @@ public class JavaController {
     @FXML
     private Button answerBtn;
 
+    String selectedAnswer;
+
     private final Questions[] questions = new Questions[] {
             new Questions("В каком из вариантов представлен корректный формат вывода информации на экран?", new String[] {"Console.Write()", "console.log()", "print()", "System.out.println()"}),
             new Questions("Какой тип данных отвечает за целые числа?", new String[] {"String", "Float", "Boolean", "Integer"}),
@@ -60,8 +65,7 @@ public class JavaController {
     private int nowQuestion = 0;
     private String nowCorrectAnswer;
     int correctAnswers = 0;
-    ToggleGroup answers = new ToggleGroup();
-    
+
 
     @FXML
     public void initialize() {
@@ -72,20 +76,29 @@ public class JavaController {
         answerBtn.setOnAction(e -> {
             // Получаем выбранную кнопку пользователем
 
-            RadioButton selectedRadioButton = (RadioButton) answers.getSelectedToggle();
-            // Код будет выполняться только если пользователь выбрал ответ
-            if(selectedRadioButton != null) {
+            if (radio_btn_1.isSelected()){
+                System.out.println(radio_btn_1.getText().equals(nowCorrectAnswer));
+                radio_btn_1.setSelected(false);
+            }
+            else if (radio_btn_2.isSelected()){
+                correctAnswers += radio_btn_2.getText().equals(nowCorrectAnswer)?1:0;
 
-                String toogleGroupValue = selectedRadioButton.getText();
+            }
+            else if (radio_btn_3.isSelected()){
+                correctAnswers += radio_btn_3.getText().equals(nowCorrectAnswer)?1:0;
+            }
+
+            else if (radio_btn_4.isSelected()){
+                correctAnswers +=radio_btn_4.getText().equals(nowCorrectAnswer)?1:0;
+            }
+            else System.out.println("Please select");
+
+
+                String toogleGroupValue = selectedAnswer;
 
                 // Сверяем ответ с корректным
 
-                if(toogleGroupValue.equals(nowCorrectAnswer)) {
-                    // Выводим информацию и увеличиваем количество верных ответов
-                    System.out.println("Верный ответ");
-                    correctAnswers++;
-                } else
-                    System.out.println("Не верный ответ");
+
 
                 // Если сейчас был последний вопрос, то скрываем все поля
                 if(nowQuestion + 1 == questions.length) {
@@ -112,7 +125,7 @@ public class JavaController {
                     List<String> intList = Arrays.asList(answers);
 
                     // Сортируем в случайном порядке
-                    Collections.shuffle(Collections.singletonList(Collections.singletonList(intList)));
+                    Collections.shuffle(intList);
 
                     // Подставляем ответы в радио кнопки
                     radio_btn_1.setText(intList.get(0));
@@ -120,10 +133,9 @@ public class JavaController {
                     radio_btn_3.setText(intList.get(2));
                     radio_btn_4.setText(intList.get(3));
 
-                    selectedRadioButton.setSelected(false);
                 }
 
-            }
+
         });
     }
 
